@@ -1,5 +1,15 @@
 --ImageWriter
---Version 2.2
+--Version 2.3
+Info = [[
+ _____                   _ _ _     _ _           
+|     |_____ ___ ___ ___| | | |___|_| |_ ___ ___ 
+|-   -|     | .'| . | -_| | | |  _| |  _| -_|  _|
+|_____|_|_|_|__,|_  |___|_____|_| |_|_| |___|_|  
+                |___|                            
+ImageWriter
+Version 2.3
+Github-Virenbar
+]]
 arg = ...
 --InPath = 'Z:\\protti\\source\\'
 --OutPath = 'Y:\\'
@@ -26,20 +36,10 @@ function command(str)
 	return arr,i
 end
 --Functions
-function Info()
-  print([[
- _____                   _ _ _     _ _           
-|     |_____ ___ ___ ___| | | |___|_| |_ ___ ___ 
-|-   -|     | .'| . | -_| | | |  _| |  _| -_|  _|
-|_____|_|_|_|__,|_  |___|_____|_| |_|_| |___|_|  
-                |___|                            ]])
-  print('ImageWriter')
-  print('Version 2.2')
-  print('Github-Virenbar')
-end
-function LoadConfig()
-	dofile('config.lua')
-  OutPath = OutPath..command('dir '..OutPath..'/b /ad')[1]..'\\'
+function Init()
+  print(Info)
+  dofile('config.lua')
+  OutPath = OutPath..command('dir '..OutPath..'/b /ad')[1]..'\\'--Первая папка в корне
 end
 function Scan()
   local arr = {}
@@ -58,7 +58,7 @@ end
 function Find(name)
   --local name = name:match('^%d%d%d%d')
 	print('[INFO]Поиск образа с именем '..name)
-  local dir = 'Folder-'..name:gsub('^(%d%d)(.+)','%1xx')
+  local dir = 'Folder-'..name:gsub('^(%d%d)(.+)','%1xx')..'\\'..'Folder-'..name:gsub('^(%d%d%d%d)(.+)','%1')
   local image = name..'.hfe'
 	local dirs = command('dir '..OutPath..'/b /ad')
   local new = false
@@ -68,12 +68,12 @@ function Find(name)
     new = not find_table(files,image) 
 	else
 		print('[INFO]Папка не найдена, создана папка: '..dir)
-		os.execute('xcopy '..OutPath..'Folder-Obraz '..OutPath..dir..'\\')
+		os.execute('md '..OutPath..dir..'\\')
     new = true
 	end
   if new then 
     print('[INFO]Образ не найден, создан образ: '..image)
-    os.execute('copy '..OutPath..dir..'\\OBRAZ.hfe '..OutPath..dir..'\\'..image)
+    os.execute('copy '..OutPath..'\\OBRAZ.hfe '..OutPath..dir..'\\'..image)
   else
     print('[INFO]Образ найден: '..image)
   end
@@ -96,8 +96,7 @@ end
 
 -- MAIN ------------------------------------------------------------------
 os.execute('chcp 65001')--Установка кодировки консоли в UTF-8
-Info()
-LoadConfig()
+Init()
 programs,i = Scan()
 if i==0 then
   print('[WAR]Папка '..InPath..' пуста.')

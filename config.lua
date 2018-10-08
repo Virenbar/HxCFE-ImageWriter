@@ -1,7 +1,7 @@
---InPath = 'Z:\\protti\\source\\'
+InPath = 'Z:\\protti\\source\\'
 --OutPath = 'Y:\\'
-OutPath = 'X:\\HxCFloppy\\Y\\'
-InPath = 'X:\\protti\\source\\'
+OutPath = 'F:\\I\\'
+--InPath = 'Z:\\protti\\source\\'
 --[[
 InPath = 'G:\\protti\\source\\' --Пример
 OutPath = 'I:\\'                --Пример
