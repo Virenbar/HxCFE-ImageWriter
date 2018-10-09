@@ -1,6 +1,6 @@
 InPath = 'Z:\\protti\\source\\'
 --OutPath = 'Y:\\'
-OutPath = 'F:\\I\\'
+OutPath = 'F:\\'
 --InPath = 'Z:\\protti\\source\\'
 --[[
 InPath = 'G:\\protti\\source\\' --Пример

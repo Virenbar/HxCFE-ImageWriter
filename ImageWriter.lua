@@ -11,8 +11,6 @@ Version 2.3
 Github-Virenbar
 ]]
 arg = ...
---InPath = 'Z:\\protti\\source\\'
---OutPath = 'Y:\\'
 i = 0
 programs = {}
 --functions
@@ -39,7 +37,14 @@ end
 function Init()
   print(Info)
   dofile('config.lua')
-  OutPath = OutPath..command('dir '..OutPath..'/b /ad')[1]..'\\'--Первая папка в корне
+  local dir = command('dir '..OutPath..'/b /ad')[1]
+  if dir == nil then
+    print('[Error]Некорректный путь')
+    os.execute('pause')
+    os.exit()
+  else
+    OutPath = OutPath..dir..'\\'--Первая папка в корне
+  end
 end
 function Scan()
   local arr = {}
@@ -57,27 +62,29 @@ function Scan()
 end
 function Find(name)
   --local name = name:match('^%d%d%d%d')
-	print('[INFO]Поиск образа с именем '..name)
-  local dir = 'Folder-'..name:gsub('^(%d%d)(.+)','%1xx')..'\\'..'Folder-'..name:gsub('^(%d%d%d%d)(.+)','%1')
+  print('[INFO]Поиск образа с именем '..name)
+  local predir = 'Folder-'..name:gsub('^(%d%d)(.+)','%1xx')
+  local dir = 'Folder-'..name:gsub('^(%d%d%d%d)(.+)','%1')
+  local dirpath = predir..'\\'..dir
   local image = name..'.hfe'
-	local dirs = command('dir '..OutPath..'/b /ad')
+  local dirs = command('dir '..OutPath..predir..'/b /ad')
   local new = false
   if find_table(dirs,dir) then
 		print('[INFO]Папка найдена: '..dir)
-    local files = command('dir '..OutPath..dir..'/b /a-d')
+    local files = command('dir '..OutPath..dirpath..'/b /a-d')
     new = not find_table(files,image) 
 	else
 		print('[INFO]Папка не найдена, создана папка: '..dir)
-		os.execute('md '..OutPath..dir..'\\')
+		os.execute('md '..OutPath..dirpath..'\\')
     new = true
 	end
   if new then 
     print('[INFO]Образ не найден, создан образ: '..image)
-    os.execute('copy '..OutPath..'\\OBRAZ.hfe '..OutPath..dir..'\\'..image)
+    os.execute('copy '..OutPath..'\\OBRAZ.hfe '..OutPath..dirpath..'\\'..image)
   else
     print('[INFO]Образ найден: '..image)
   end
-  return OutPath..dir..'\\'..image
+  return OutPath..dirpath..'\\'..image
 end
 function AddFiles(image,name)
   local files = command('dir '..InPath..name..'.* /b /a-d') 
