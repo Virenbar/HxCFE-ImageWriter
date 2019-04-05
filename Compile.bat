@@ -1,1 +1,0 @@
-srlua-5.3.4_Win32_bin\glue.exe srlua-5.3.4_Win32_bin\srlua.exe ImageWriter.lua ImageWriter\ImageWriter.exe
